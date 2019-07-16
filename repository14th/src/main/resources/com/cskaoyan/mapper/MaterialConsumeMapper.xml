@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.MaterialConsumeMapper">
+  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.MaterialConsume">
+    <id column="consume_id" jdbcType="VARCHAR" property="consumeId" />
+    <result column="work_id" jdbcType="VARCHAR" property="workId" />
+    <result column="material_id" jdbcType="VARCHAR" property="materialId" />
+    <result column="consume_amount" jdbcType="INTEGER" property="consumeAmount" />
+    <result column="consume_date" jdbcType="TIMESTAMP" property="consumeDate" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    consume_id, work_id, material_id, consume_amount, consume_date, sender, receiver, 
+    note
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_consume
+    where consume_id = #{consumeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from material_consume
+    where consume_id = #{consumeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.cskaoyan.bean.MaterialConsume">
+    insert into material_consume (consume_id, work_id, material_id, 
+      consume_amount, consume_date, sender, 
+      receiver, note)
+    values (#{consumeId,jdbcType=VARCHAR}, #{work.workId,jdbcType=VARCHAR}, #{material.materialId,jdbcType=VARCHAR},
+      #{consumeAmount,jdbcType=INTEGER}, #{consumeDate,jdbcType=TIMESTAMP}, #{sender,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.MaterialConsume">
+    insert into material_consume
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consumeId != null">
+        consume_id,
+      </if>
+      <if test="workId != null">
+        work_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="consumeAmount != null">
+        consume_amount,
+      </if>
+      <if test="consumeDate != null">
+        consume_date,
+      </if>
+      <if test="sender != null">
+        sender,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consumeId != null">
+        #{consumeId,jdbcType=VARCHAR},
+      </if>
+      <if test="workId != null">
+        #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="consumeAmount != null">
+        #{consumeAmount,jdbcType=INTEGER},
+      </if>
+      <if test="consumeDate != null">
+        #{consumeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sender != null">
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.MaterialConsume">
+    update material_consume
+    <set>
+      <if test="workId != null">
+        work_id = #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="consumeAmount != null">
+        consume_amount = #{consumeAmount,jdbcType=INTEGER},
+      </if>
+      <if test="consumeDate != null">
+        consume_date = #{consumeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sender != null">
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consume_id = #{consumeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.MaterialConsume">
+    update material_consume
+    set work_id = #{workId,jdbcType=VARCHAR},
+      material_id = #{materialId,jdbcType=VARCHAR},
+      consume_amount = #{consumeAmount,jdbcType=INTEGER},
+      consume_date = #{consumeDate,jdbcType=TIMESTAMP},
+      sender = #{sender,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR}
+    where consume_id = #{consumeId,jdbcType=VARCHAR}
+  </update>
+
+
+  <resultMap id="materialConsumeMap" type="com.cskaoyan.bean.MaterialConsume">
+    <id column="consume_id" jdbcType="VARCHAR" property="consumeId" />
+    <result column="consume_amount" jdbcType="INTEGER" property="consumeAmount" />
+    <result column="consume_date" jdbcType="TIMESTAMP" property="consumeDate" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="mc_note" jdbcType="VARCHAR" property="note" />
+    <!--material-->
+    <association property="material" javaType="com.cskaoyan.bean.Material">
+      <id column="material_id" jdbcType="VARCHAR" property="materialId" />
+      <result column="material_type" jdbcType="VARCHAR" property="materialType" />
+      <result column="status" jdbcType="VARCHAR" property="status" />
+      <result column="remaining" jdbcType="INTEGER" property="remaining" />
+      <result column="m_note" jdbcType="VARCHAR" property="note" />
+    </association>
+    <!--work-->
+    <association property="work" javaType="com.cskaoyan.bean.Work">
+      <id column="work_id" jdbcType="VARCHAR" property="workId" />
+      <result column="process_number" jdbcType="VARCHAR" property="processNumber" />
+      <result column="product_id" jdbcType="VARCHAR" property="productId" />
+      <result column="process_id" jdbcType="VARCHAR" property="processId" />
+      <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+      <result column="rating" jdbcType="INTEGER" property="rating" />
+    </association>
+  </resultMap>
+  <select id="findMaterialConsume" resultMap="materialConsumeMap">
+    SELECT
+      mc.consume_amount,
+      mc.consume_date,
+      mc.consume_id,
+      mc.note AS mc_note,
+      mc.receiver,
+      mc.sender,
+      m.material_id,
+      m.material_type,
+      m.note AS m_note,
+      m.remaining,
+      m.`status`,
+      w.device_id,
+      w.process_id,
+      w.process_number,
+      w.product_id,
+      w.rating,
+      w.work_id
+    from material_consume mc
+    LEFT JOIN material m ON mc.material_id = m.material_id
+    LEFT JOIN `work` w ON mc.work_id = w.work_id
+  </select>
+
+  <delete id="deleteMaterialConsumeList">
+    delete from material_consume where consume_id in
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+  <select id="materialConsumeSearchByConsumeId" resultMap="materialConsumeMap">
+        SELECT
+      mc.consume_amount,
+      mc.consume_date,
+      mc.consume_id,
+      mc.note AS mc_note,
+      mc.receiver,
+      mc.sender,
+      m.material_id,
+      m.material_type,
+      m.note AS m_note,
+      m.remaining,
+      m.`status`,
+      w.device_id,
+      w.process_id,
+      w.process_number,
+      w.product_id,
+      w.rating,
+      w.work_id
+    from material_consume mc
+    LEFT JOIN material m ON mc.material_id = m.material_id
+    LEFT JOIN `work` w ON mc.work_id = w.work_id
+    where mc.consume_id like "%"#{searchValue}"%"
+  </select>
+
+  <select id="materialConsumeSearchByWorkId" resultMap="materialConsumeMap">
+        SELECT
+      mc.consume_amount,
+      mc.consume_date,
+      mc.consume_id,
+      mc.note AS mc_note,
+      mc.receiver,
+      mc.sender,
+      m.material_id,
+      m.material_type,
+      m.note AS m_note,
+      m.remaining,
+      m.`status`,
+      w.device_id,
+      w.process_id,
+      w.process_number,
+      w.product_id,
+      w.rating,
+      w.work_id
+    from material_consume mc
+    LEFT JOIN material m ON mc.material_id = m.material_id
+    LEFT JOIN `work` w ON mc.work_id = w.work_id
+    where mc.work_id like "%"#{searchValue}"%"
+  </select>
+
+  <select id="materialConsumeSearchByMaterialId" resultMap="materialConsumeMap">
+        SELECT
+      mc.consume_amount,
+      mc.consume_date,
+      mc.consume_id,
+      mc.note AS mc_note,
+      mc.receiver,
+      mc.sender,
+      m.material_id,
+      m.material_type,
+      m.note AS m_note,
+      m.remaining,
+      m.`status`,
+      w.device_id,
+      w.process_id,
+      w.process_number,
+      w.product_id,
+      w.rating,
+      w.work_id
+    from material_consume mc
+    LEFT JOIN material m ON mc.material_id = m.material_id
+    LEFT JOIN `work` w ON mc.work_id = w.work_id
+    where mc.material_id like "%"#{searchValue}"%"
+  </select>
+</mapper>
